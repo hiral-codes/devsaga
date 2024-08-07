@@ -8,7 +8,7 @@ import Latest from "./pages/Latest";
 import Top from "./pages/Top";
 import BlogLayout from "./layout/BlogLayout";
 import Blog from "./pages/Blog";
-import Profile from "./component/Profile";
+import Profile from "./component/AuthorProfile";
 
 export default function App() {
   return (

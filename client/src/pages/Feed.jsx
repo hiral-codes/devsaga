@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../utils/api";
-import Blog from "../component/Blog";
+import Blog from "../component/BlogStripe";
 import { Link } from "react-router-dom";
 export default function Feed() {
   const [blogs, setBlogs] = useState({});
@@ -33,6 +33,7 @@ export default function Feed() {
             firstName={blog.author.firstName}
             lastName={blog.author.lastName}
             avatar={blog.author.image}
+            tags={blog.tags}
             title={blog.title}
             content={blog.content}
             createdAt={blog.createdAt}

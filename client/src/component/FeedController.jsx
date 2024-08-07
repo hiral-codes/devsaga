@@ -12,7 +12,7 @@ export default function FeedController() {
         }`}
         to="/"
       >
-        Relevant
+        Relates You
       </Link>
       <Link
         className={`text-lg hover:bg-white hover:text-blue-500 rounded-md p-2 ${

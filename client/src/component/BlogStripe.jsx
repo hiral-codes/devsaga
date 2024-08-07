@@ -26,13 +26,17 @@ export default function Blog({
         </div>
       </div>
       <div className="px-10">
-        <h1 className="text-3xl font-semibold py-2">{title}</h1>
+        <h1 className="text-xl md:text-3xl font-semibold py-2 hover:text-blue-700">
+          {title}
+        </h1>
         {tags && (
-          <div>
+          <div className="flex items-center gap-2 py-4">
             {tags.map((tag, tagId) => {
               return (
-                <div key={tagId} className="flex items-center gap-2">
-                  <div className="rounded-3xl p-2 bg-gray-700">#{tag}</div>
+                <div key={tagId}>
+                  <div className="rounded-3xl border bg-white w-fit px-2">
+                    <div>#{tag}</div>
+                  </div>
                 </div>
               );
             })}

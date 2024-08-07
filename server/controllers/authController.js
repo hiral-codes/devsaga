@@ -7,16 +7,11 @@ dotenv.config();
 export const createUser = async (req, res) => {
     try {
         const { username, email, firstName, lastName, image, tags, password } = req.body;
-
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists with this email" });
         }
-
-        // Hash the password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
-
         const user = new User({
             username,
             email,
@@ -26,7 +21,6 @@ export const createUser = async (req, res) => {
             tags,
             password: hashedPassword
         });
-
         const savedUser = await user.save();
         res.status(201).json({ user: savedUser, message: "User Created Successfully" });
     } catch (error) {
@@ -34,6 +28,7 @@ export const createUser = async (req, res) => {
         res.status(500).json({ message: "Failed to Create User", error: error.message });
     }
 };
+
 
 export const login = async (req, res) => {
     const { username, password } = req.body;
@@ -62,6 +57,7 @@ export const login = async (req, res) => {
         return res.status(500).json({ error: error.message, message: "Internal Server Error" });
     }
 };
+
 
 export const logout = async (req, res) => {
     try {

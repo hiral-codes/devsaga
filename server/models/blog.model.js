@@ -17,7 +17,8 @@ const blogSchema = new mongoose.Schema({
     author: {
         firstName: String,
         lastName: String,
-        image: String
+        image: String,
+        username: String
     },
     likes: [likesSchema],
     comments: [commentSchema],
