@@ -1,17 +1,16 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 
 function ProtectedRoute({ children }) {
-  const { user } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-      setLoading(false);
-    };
-    fetchData();
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+    setLoading(false);
   }, []);
 
   if (loading) {
@@ -21,7 +20,7 @@ function ProtectedRoute({ children }) {
   if (user) {
     return children;
   } else {
-    return <Navigate to="/login" />;
+    return <Navigate to="/home" />;
   }
 }
 

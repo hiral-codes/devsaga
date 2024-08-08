@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
       toast.success("Login Success")
-      navigate("/profile");
+      navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     }

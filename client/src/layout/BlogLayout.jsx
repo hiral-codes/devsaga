@@ -8,7 +8,7 @@ export default function BlogLayout({ children, profile }) {
       <div className="grid grid-cols-12 pt-20">
         <div className="col-span-2">LikeSection</div>
         <div className="col-span-7">{children}</div>
-        <div className="col-span-3 px-4">{profile}</div>
+        <div className="col-span-3 px-4 pb-10">{profile}</div>
       </div>
     </React.Fragment>
   );

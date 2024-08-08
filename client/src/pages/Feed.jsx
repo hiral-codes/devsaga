@@ -11,7 +11,6 @@ export default function Feed() {
       try {
         const response = await api.get("/get-blogs");
         setBlogs(response.data);
-        console.log(response.data);
         setLoading(false);
       } catch (error) {
         console.log("error:", error);
@@ -27,9 +26,8 @@ export default function Feed() {
   return (
     <div className="flex flex-col gap-2">
       {blogs.map((blog) => (
-        <Link to={`${blog.author.username}/${blog._id}`}>
+        <Link to={`${blog.author.username}/${blog._id}`} key={blog._id}>
           <Blog
-            key={blog._id}
             firstName={blog.author.firstName}
             lastName={blog.author.lastName}
             avatar={blog.author.image}
@@ -37,7 +35,8 @@ export default function Feed() {
             title={blog.title}
             content={blog.content}
             createdAt={blog.createdAt}
-            comments={blog.comments}
+            comments={blog.comments.length}
+            likes={blog.likes.length}
           />
         </Link>
       ))}

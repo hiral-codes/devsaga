@@ -9,6 +9,8 @@ import Top from "./pages/Top";
 import BlogLayout from "./layout/BlogLayout";
 import Blog from "./pages/Blog";
 import Profile from "./component/AuthorProfile";
+import Login from "./component/Login";
+import SignUp from "./component/SignUp";
 
 export default function App() {
   return (
@@ -22,7 +24,11 @@ export default function App() {
           </Route>
           <Route
             path="/:username/:blogId"
-            element={<BlogLayout children={<Blog />} profile={<Profile />} />}
+            element={
+              <BlogLayout profile={<Profile />}>
+                <Blog />
+              </BlogLayout>
+            }
           />
         </Routes>
       </BrowserRouter>

@@ -37,7 +37,7 @@ export const getAuthor = async (req, res) => {
         if (!user) {
             return res.status(401).json("!Author Not Found");
         }
-        const { firstName, lastName, image, followers, username: authorUsername,createdAt } = user;
+        const { firstName, lastName, image, followers, username: authorUsername, createdAt } = user;
         const data = {
             firstName,
             lastName,
@@ -49,6 +49,19 @@ export const getAuthor = async (req, res) => {
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching the author." });
+    }
+};
+
+export const moreBlogsFinder = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const blogs = await Blog.find({ "author.username": username });
+        if (!blogs) {
+            return res.status(401).json("!Blogs Not Found");
+        }
+        res.status(200).json(blogs);
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred while fetching the blogs." });
     }
 };
 
