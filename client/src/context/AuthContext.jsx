@@ -5,22 +5,25 @@ import toast from "react-hot-toast";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const userData = localStorage.getItem("user");
+    return userData ? JSON.parse(userData) : null;
+  });
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
     }
-  }, []);
+  }, [user]);
 
   const login = async ({ username, password }, navigate) => {
     try {
       const response = await api.post("/auth/login", { username, password });
       const data = response.data;
       setUser(data.user);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      toast.success("Login Success")
+      toast.success("Login Success");
       navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
@@ -30,7 +33,6 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.post("/auth/logout");
-      localStorage.removeItem("user");
       setUser(null);
       toast.success("Logged Out");
     } catch (error) {

@@ -30,7 +30,7 @@ export default function Header() {
           <Link to="/auth/signup" className="p-2 bg-none border font-semibold hover:underline ease-in border-blue-600 rounded-lg text-blue-600 hover:bg-blue-600 hover:border-none hover:text-white">
             Create Account
           </Link>
-          <Link to="/auth/login" className="p-2 bg-none border font-semibold hover:underline ease-in border-blue-600 rounded-lg text-blue-600 hover:bg-blue-600 hover:border-none hover:text-white">
+          <Link to="/auth/login" className="p-2 bg-none border font-semibold ease-in rounded-lg bg-blue-600 text-white">
             Login
           </Link>
         </div>

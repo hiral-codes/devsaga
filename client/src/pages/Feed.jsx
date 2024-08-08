@@ -22,7 +22,7 @@ export default function Feed() {
   if (loading) {
     return <div>Loading...</div>;
   }
-
+  
   return (
     <div className="flex flex-col gap-2">
       {blogs.map((blog) => (

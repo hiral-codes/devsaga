@@ -5,6 +5,7 @@ import { format } from "date-fns/format";
 export default function Blog() {
   const [blog, setBlog] = useState({});
   const [loading, setLoading] = useState(true);
+  const [liked, setLiked] = useState(false);
   const { blogId, username } = useParams();
   
   useEffect(() => {
@@ -19,6 +20,9 @@ export default function Blog() {
     };
     getBlog();
   }, [blogId, username]);
+
+  
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -59,6 +63,7 @@ export default function Blog() {
         </div>
       )}
       <div className="text-2xl py-4">{blog.content}</div>
+      <div className="py-8">{blog.likes.length} Like</div>
       <div className="border-t">
         <h1 className="pt-6 font-bold text-xl">Comments</h1>
       </div>
