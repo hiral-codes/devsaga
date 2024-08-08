@@ -6,10 +6,10 @@ const likesSchema = new mongoose.Schema({
 }, { _id: false });
 
 const commentSchema = new mongoose.Schema({
-    commentBy: { type: mongoose.Schema.ObjectId, ref: "User" },
+    commentBy: { userId: String, firstName: String, lastName: String, image: String },
     comment: { type: String, },
     createdAt: { type: Date, default: Date.now }
-}, { _id: false });
+});
 
 const blogSchema = new mongoose.Schema({
     title: { type: String, required: true },

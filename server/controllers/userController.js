@@ -132,10 +132,11 @@ export const unlike = async (req, res) => {
 export const comment = async (req, res) => {
     const { blogId, userId, comment } = req.body;
     try {
+        const user = await User.findById(userId)
+        if (!user) return handleNotFound(res, "User Not Found");
         const blog = await Blog.findById(blogId);
         if (!blog) return handleNotFound(res, "Blog not found");
-
-        blog.comments.push({ commentBy: userId, comment });
+        blog.comments.push({ commentBy: { userId, firstName: user.firstName, lastName: user.lastName, image: user.image }, comment });
         await blog.save();
         res.status(200).json({ message: "Comment Added" });
     } catch (error) {
