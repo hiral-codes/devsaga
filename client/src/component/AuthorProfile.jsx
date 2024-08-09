@@ -21,7 +21,7 @@ function Profile() {
       }
     };
     getAuthor();
-  }, [username]);
+  }, []);
 
   useEffect(() => {
     const getMoreBlog = async () => {
@@ -34,7 +34,7 @@ function Profile() {
       }
     };
     getMoreBlog();
-  }, [username]);
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;

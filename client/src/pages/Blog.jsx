@@ -3,11 +3,10 @@ import { useParams } from "react-router-dom";
 import api from "../utils/api";
 import { format } from "date-fns/format";
 import { AuthContext } from "../context/AuthContext";
-import { IoHeartOutline } from "react-icons/io5";
-import { BsHeartFill } from "react-icons/bs";
-import { BiCommentEdit } from "react-icons/bi";
 import Comment from "../component/Comment";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import toast from "react-hot-toast";
+
 export default function Blog() {
   const { user } = useContext(AuthContext);
   const [blog, setBlog] = useState({});
@@ -16,44 +15,49 @@ export default function Blog() {
   const [liked, setLiked] = useState(false);
   const { blogId, username } = useParams();
 
-  useEffect(() => {
-    const getBlog = async () => {
-      try {
-        const response = await api.get(`/get-blogs/${username}/${blogId}`);
-        setBlog(response.data);
+  const getBlog = async () => {
+    try {
+      const response = await api.get(`/get-blogs/${username}/${blogId}`);
+      setBlog(response.data);
+      if (user) {
         setLiked(response.data.likes.some((like) => like.likedBy === user._id));
-        setLoading(false);
-        console.log(response.data);
-      } catch (error) {
-        console.log("error:", error);
       }
-    };
+      setLoading(false);
+      console.log("Api Called");
+    } catch (error) {
+      console.log("error:", error);
+    }
+  };
+
+  useEffect(() => {
     getBlog();
-  }, [blogId, liked, comment]);
+  }, [blogId]);
 
   const handleLike = async () => {
     if (liked) return;
     try {
-      const response = await api.patch("/blog/like", {
+      await api.patch("/blog/like", {
         blogId,
         userId: user._id,
       });
       setLiked(true);
+      await getBlog();
     } catch (error) {
-      console.error("Error liking the blog:", error);
+      toast.error("Please Login");
     }
   };
 
   const handleUnlike = async () => {
     if (!liked) return;
     try {
-      const response = await api.patch("/blog/unlike", {
+      await api.patch("/blog/unlike", {
         blogId,
         userId: user._id,
       });
       setLiked(false);
+      await getBlog();
     } catch (error) {
-      console.error("Error unliking the blog:", error);
+      toast.error("Please Login");
     }
   };
 
@@ -66,9 +70,9 @@ export default function Blog() {
         comment,
       });
       setComment("");
-      toast.success("Comment Added");
+      await getBlog();
     } catch (error) {
-      console.log(error);
+      toast.error("Please Login");
     }
   };
 
@@ -91,84 +95,74 @@ export default function Blog() {
           <div className="font-semibold">
             {blog.author.firstName || "Hiral"} {blog.author.lastName || "Patel"}
           </div>
-          <div className="text-xs">
-            {format(new Date(blog.createdAt), "MMM d")}
+          <div className="text-xs text-gray-500">
+            {format(new Date(blog.createdAt), "MMM d, HH:mm")}
           </div>
         </div>
       </div>
       <h1 className="text-4xl font-extrabold py-2">{blog.title}</h1>
       {blog.tags && (
-        <div className="flex items-center gap-2 py-4">
-          {blog.tags.map((tag, tagId) => {
-            return (
-              <div key={tagId}>
-                <div className="rounded-3xl border bg-white w-fit px-2">
-                  <div>#{tag}</div>
-                </div>
-              </div>
-            );
-          })}
+        <div className="flex items-center gap-2 pb-2">
+          {blog.tags.map((tag, tagId) => (
+            <div key={tagId} className="text-gray-400">
+              <div>#{tag}</div>
+            </div>
+          ))}
         </div>
       )}
-      <div className="text-2xl py-4">{blog.content}</div>
+      <div className="text-2xl p-4 rounded-md border">{blog.content}</div>
 
-      <div className="flex items-center gap-4 border-t pt-4">
-        <div className="text-center">
-          <button onClick={liked ? handleUnlike : handleLike}>
-            {liked ? (
-              <BsHeartFill className="text-xl text-red-600" />
-            ) : (
-              <IoHeartOutline className="text-2xl" />
-            )}
-          </button>
-          <br />
-          {blog.likes.length} Like
-        </div>
-        <div className="text-center">
-          <button>
-            <BiCommentEdit className="text-2xl" />
-          </button>
-          <br />
-          {blog.comments.length} Comments
-        </div>
+      <div className="flex items-center gap-6 py-4">
+        <button onClick={liked ? handleUnlike : handleLike}>
+          {liked ? (
+            <FaHeart className="text-2xl text-red-600" />
+          ) : (
+            <FaRegHeart className="text-2xl" />
+          )}
+        </button>
+        <button>
+          <img src="/share.svg" alt="" />
+        </button>
+        <button>
+          <img src="/save.svg" alt="" />
+        </button>
       </div>
-      <div className="my-12">
+      <div className="pb-4"> {blog.likes.length} Likes</div>
+      <div className="my-">
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            className="p-2 border rounded-md"
+            className="p-2 border rounded-md outline-none"
             value={comment}
-            placeholder="Write Comment"
-            onChange={(e) => {
-              setComment(e.target.value);
-            }}
+            placeholder="Add Comment"
+            onChange={(e) => setComment(e.target.value)}
           />
-          <button
-            type="submit"
-            className="p-2 bg-blue-600 ml-4 rounded-md font-semibold text-white"
-          >
-            Comment
-          </button>
+          {comment.length > 0 && (
+            <button
+              type="submit"
+              className="p-2 bg-blue-600 ml-4 rounded-md font-semibold text-white"
+            >
+              Comment
+            </button>
+          )}
         </form>
       </div>
-      <div className="border-t mt-4">
+      <div className="mt-4">
         <h1 className="pt-6 font-bold text-xl">Comments</h1>
         <div>
           {blog.comments
             .slice()
             .reverse()
-            .map((comment) => {
-              return (
-                <Comment
-                  key={comment._id} // Assuming comment._id is unique
-                  avatar={comment.commentBy.image}
-                  createdAt={comment.createdAt}
-                  firstName={comment.commentBy.firstName}
-                  lastName={comment.commentBy.lastName}
-                  comment={comment.comment}
-                />
-              );
-            })}
+            .map((comment) => (
+              <Comment
+                key={comment._id}
+                avatar={comment.commentBy.image}
+                createdAt={comment.createdAt}
+                firstName={comment.commentBy.firstName}
+                lastName={comment.commentBy.lastName}
+                comment={comment.comment}
+              />
+            ))}
         </div>
       </div>
     </div>

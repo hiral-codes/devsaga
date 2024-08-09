@@ -16,22 +16,29 @@ export default function Login() {
 
   return (
     <div className="h-screen flex items-center justify-center">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="username"
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
-        />
-        <input
-          type="password"
-          placeholder="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-        <button type="submit">Login</button>
+      <form onSubmit={handleSubmit} className="p-4 bg-white rounded-md border min-w-80">
+        <h1 className="text-xl font-bold">Login</h1>
+        <div className="my-4">
+          <input
+            type="text"
+            placeholder="username"
+            className="w-full p-2 border rounded-md outline-none"
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+          />
+        </div>
+        <div className="my-4">
+          <input
+            type="password"
+            placeholder="password"
+            className="w-full p-2 border rounded-md outline-none"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+        </div>
+        <button type="submit" className="w-full rounded-md bg-blue-600 p-2 font-bold text-white">Login</button>
       </form>
     </div>
   );

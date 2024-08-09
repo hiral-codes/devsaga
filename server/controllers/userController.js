@@ -73,6 +73,7 @@ export const moreBlogsFinder = async (req, res) => {
         handleError(res, error, "Failed to fetch blogs");
     }
 };
+   
 
 export const getBlogs = async (req, res) => {
     try {
@@ -138,7 +139,7 @@ export const comment = async (req, res) => {
         if (!blog) return handleNotFound(res, "Blog not found");
         blog.comments.push({ commentBy: { userId, firstName: user.firstName, lastName: user.lastName, image: user.image }, comment });
         await blog.save();
-        res.status(200).json({ message: "Comment Added" });
+        res.status(200).json(blog);
     } catch (error) {
         handleError(res, error, "Failed to add comment", 400);
     }

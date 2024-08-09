@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./Header";
+import Header from "../component/Header";
 
 export default function BlogLayout({ children, profile }) {
   return (

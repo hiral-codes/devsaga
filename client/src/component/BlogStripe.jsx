@@ -1,6 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
-export default function Blog({
+export default function BlogStripe({
   title,
   createdAt,
   firstName,
@@ -44,7 +44,7 @@ export default function Blog({
         )}
         <div className="flex gap-4 text-gray-600">
           <span>❤️{likes || 0} Like</span>
-          <span>🗨️ {comment || 0} Comments</span>
+          <span>🗨️ {comment} Comments</span>
         </div>
       </div>
     </div>

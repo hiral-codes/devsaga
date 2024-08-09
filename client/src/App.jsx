@@ -9,16 +9,24 @@ import BlogLayout from "./layout/BlogLayout";
 import Blog from "./pages/Blog";
 import Profile from "./component/AuthorProfile";
 import Login from "./component/Login";
+import AuthLayout from "./layout/AuthLayout";
+import SignUp from "./component/SignUp";
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/auth/login" element={<Login />} />
+        {/* Root Layout */}
         <Route path="/" element={<RootLayout />}>
           <Route path="" element={<Feed />} />
           <Route path="latest" element={<Latest />} />
           <Route path="top" element={<Top />} />
         </Route>
+        {/* Auth Layout */}
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
+        </Route>
+        {/* Blogs Layout */}
         <Route
           path="/:username/:blogId"
           element={
@@ -27,8 +35,9 @@ export default function App() {
             </BlogLayout>
           }
         />
+        
       </Routes>
-      <Toaster />
+      <Toaster position="top-center" />
     </BrowserRouter>
   );
 }
