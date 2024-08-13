@@ -1,30 +1,57 @@
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import cloudinary from "../services/cloudinary.js";
 import bcrypt from "bcrypt";
 import dotenv from 'dotenv'
 dotenv.config();
 
 export const createUser = async (req, res) => {
     try {
-        const { username, email, firstName, lastName, image, tags, password } = req.body;
+        const { username, email, firstName, lastName, tags, password } = req.body;
+
+        // Check if the user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists with this email" });
         }
+
+        // Initialize the avatar variable
+        let avatar = "";
+
+        // Upload avatar if file exists
+        if (req.file) {
+            try {
+                const result = await cloudinary.uploader.upload(req.file.path, {
+                    folder: "user_avatar",
+                });
+                avatar = result.secure_url;
+            } catch (error) {
+                console.error("Error uploading image:", error);
+                return res.status(500).json({ message: "Image upload failed", error: error.message });
+            }
+        }
+
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user instance
         const user = new User({
             username,
             email,
             firstName,
             lastName,
-            image,
+            image: avatar, // Use the uploaded avatar URL
             tags,
-            password: hashedPassword
+            password: hashedPassword,
         });
+
+        // Save the user to the database
         const savedUser = await user.save();
+
+        // Respond with success message
         res.status(201).json({ user: savedUser, message: "User Created Successfully" });
     } catch (error) {
-        console.error(error);
+        console.error("Error creating user:", error);
         res.status(500).json({ message: "Failed to Create User", error: error.message });
     }
 };

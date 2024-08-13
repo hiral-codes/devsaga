@@ -2,15 +2,44 @@ import React, { useContext, useEffect, useState } from "react";
 import { IoNotificationsCircleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import api from "../utils/api";
 export default function Header() {
-  const [isOpen,setisOpen]=useState(false)
   const { logout, user } = useContext(AuthContext);
+  const [isOpen, setisOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const getSearch = async () => {
+      try {
+        const response = await api.get(`/search`, {
+          params: {
+            keyword: search,
+          },
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.log("Error", error);
+      }
+    };
+    getSearch();
+  }, [search]);
+  
   const handleLogout = () => {
     logout();
   };
   return (
     <div className="h-14 flex items-center shadow-sm justify-between px-20 border-b fixed top-0 left-0 right-0 bg-white">
-      <Link to="/" className="logo font-extrabold text-xl">DevSaga</Link>
+      <div className="flex items-center gap-8">
+        <Link to="/" className="logo font-extrabold text-xl">
+          DevSaga
+        </Link>
+        <input
+          type="search"
+          onChange={(e) => setSearch(e.target.value)}
+          className="p-1 rounded-md bg-gray-50 border outline-none"
+          placeholder="Search"
+        />
+      </div>
       {user ? (
         <div className="flex items-center gap-4">
           <button className="p-2 bg-none border font-semibold hover:underline ease-in border-blue-600 rounded-lg text-blue-600 hover:bg-blue-600 hover:border-none hover:text-white">

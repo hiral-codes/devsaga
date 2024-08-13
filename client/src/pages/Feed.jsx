@@ -22,7 +22,30 @@ export default function Feed() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full shadow-sm border rounded-md p-4 bg-white overflow-hidden">
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 overflow-hidden rounded-full object-cover bg-gray-300 animate-pulse"></div>
+          <div className="">
+            <div className="font-semibold h-10 bg-gray-300 rounded-md animate-pulse w-48"></div>
+          </div>
+        </div>
+        <div className="px-10">
+          <h1 className="text-xl md:text-3xl font-semibold py-2 hover:text-blue-700 h-4"></h1>
+          <div className="flex items-center gap-2 py-4">
+            <div>
+              <div className="rounded-3xl border h-10 bg-gray-300 px-2">
+                <div></div>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-4 text-gray-600">
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
