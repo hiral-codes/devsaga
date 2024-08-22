@@ -9,16 +9,11 @@ export const createUser = async (req, res) => {
     try {
         const { username, email, firstName, lastName, tags, password } = req.body;
 
-        // Check if the user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists with this email" });
         }
-
-        // Initialize the avatar variable
         let avatar = "";
-
-        // Upload avatar if file exists
         if (req.file) {
             try {
                 const result = await cloudinary.uploader.upload(req.file.path, {
@@ -30,25 +25,19 @@ export const createUser = async (req, res) => {
                 return res.status(500).json({ message: "Image upload failed", error: error.message });
             }
         }
-
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new user instance
         const user = new User({
             username,
             email,
             firstName,
             lastName,
-            image: avatar, // Use the uploaded avatar URL
+            image: avatar,
             tags,
             password: hashedPassword,
         });
 
-        // Save the user to the database
         const savedUser = await user.save();
-
-        // Respond with success message
         res.status(201).json({ user: savedUser, message: "User Created Successfully" });
     } catch (error) {
         console.error("Error creating user:", error);

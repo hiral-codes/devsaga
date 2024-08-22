@@ -32,6 +32,15 @@ export default function SignUp() {
         <div className="flex items-center gap-4">
           <div className="my-2">
             <input
+              type="file"
+              name="image"
+              placeholder="Upload Profile"
+              className="w-full p-2 border rounded-md outline-none"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="my-2">
+            <input
               type="text"
               name="firstname"
               placeholder="First Name"
