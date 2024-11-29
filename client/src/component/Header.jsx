@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import api from "../utils/api";
 export default function Header() {
-  const { logout, user } = useContext(AuthContext);
+  const { login, logout, user } = useContext(AuthContext);
   const [isOpen, setisOpen] = useState(false);
   const [search, setSearch] = useState("");
-
+  
   useEffect(() => {
     const getSearch = async () => {
       try {
@@ -23,10 +23,11 @@ export default function Header() {
     };
     getSearch();
   }, [search]);
-  
+
   const handleLogout = () => {
     logout();
   };
+
   return (
     <div className="h-14 flex items-center shadow-sm justify-between px-20 border-b fixed top-0 left-0 right-0 bg-white">
       <div className="flex items-center gap-8">
@@ -75,23 +76,17 @@ export default function Header() {
                 </ul>
               </div>
             )}
-            <img src={user.image} alt="" className="w-8 h-8 rounded-full" />
+            <img src={user.photoURL} alt="" className="w-8 h-8 rounded-full" />
           </button>
         </div>
       ) : (
         <div className="flex items-center gap-4">
-          <Link
-            to="/auth/login"
+          <button
+            onClick={login}
             className="font-semibold text-gray-800 hover:text-blue-600"
           >
-            Login
-          </Link>
-          <Link
-            to="/auth/signup"
-            className="p-2 bg-none ring-1 hover:underline text-blue-600 font-semibold ease-in rounded-lg hover:bg-blue-600 hover:text-white"
-          >
-            Create Account
-          </Link>
+            Sign in
+          </button>
         </div>
       )}
     </div>

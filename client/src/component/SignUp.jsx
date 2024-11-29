@@ -4,11 +4,11 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 export default function SignUp() {
-  const { login } = useContext(AuthContext);
+  const { login, handleGoogleSignIn } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstname:"",
-    lastname:""
+    firstname: "",
+    lastname: "",
   });
 
   const handleSubmit = (e) => {
@@ -17,7 +17,7 @@ export default function SignUp() {
   };
 
   const handleChange = (e) => {
-    console.log(e.target.name,e.target.value)
+    console.log(e.target.name, e.target.value);
   };
 
   console.log(formData);
@@ -98,6 +98,7 @@ export default function SignUp() {
           </Link>
         </div>
       </form>
+      <button onClick={handleGoogleSignIn}>Continue With Google</button>
     </div>
   );
 }

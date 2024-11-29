@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import api from "../utils/api";
 import toast from "react-hot-toast";
-
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../services/Firebase";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -18,13 +19,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  const login = async ({ username, password }, navigate) => {
+  const login = async (navigate) => {
     try {
-      const response = await api.post("/auth/login", { username, password });
-      const data = response.data;
-      setUser(data.user);
+      const result = await signInWithPopup(auth, provider);
+      const data = result.user;
+      console.log(data);
+      setUser(data);
       toast.success("Login Success");
-      navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     }
@@ -38,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     }
-  }; 
+  };
 
   return (
     <AuthContext.Provider value={{ login, user, logout }}>

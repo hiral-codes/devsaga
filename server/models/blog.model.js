@@ -6,7 +6,7 @@ const likesSchema = new mongoose.Schema({
 }, { _id: false });
 
 const commentSchema = new mongoose.Schema({
-    commentBy: { userId: String, firstName: String, lastName: String, image: String },
+    commentBy: { userId: String, displayName: String, image: String },
     comment: { type: String, },
     createdAt: { type: Date, default: Date.now }
 });
@@ -16,8 +16,7 @@ const blogSchema = new mongoose.Schema({
     content: { type: String, required: true },
     banner: String,
     author: {
-        firstName: String,
-        lastName: String,
+        displayName: String,
         image: String,
         username: String
     },

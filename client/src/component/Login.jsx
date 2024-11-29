@@ -4,6 +4,8 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../services/Firebase";
 export default function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -18,6 +20,16 @@ export default function Login() {
   };
   const handleInputPassword = () => {
     setShowPassword((prevState) => !prevState);
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log(result);
+      const token = await result.user.getIdToken();
+    } catch {
+      console.error(error);
+    }
   };
 
   return (
@@ -38,19 +50,19 @@ export default function Login() {
           />
         </div>
         <div className="my-4 flex items-center gap-4">
-        <input
-        type={showPassword ? "text" : "password"}
-        placeholder="Password"
-        className="w-full p-2 border rounded-md outline-none"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-      />
-      <span className="cursor-pointer" onClick={handleInputPassword}>
-        {showPassword ? "🙈" : "👁️"}
-      </span>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="w-full p-2 border rounded-md outline-none"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <span className="cursor-pointer" onClick={handleInputPassword}>
+            {showPassword ? "🙈" : "👁️"}
+          </span>
         </div>
-          <p className="text-blue-600 pt-2">Forget Password?</p>
+        <p className="text-blue-600 pt-2">Forget Password?</p>
         <button
           type="submit"
           className="w-full rounded-md bg-blue-600 p-2 font-bold text-white"
@@ -62,6 +74,7 @@ export default function Login() {
             Don't have an Account?
           </Link>
         </div>
+        <button onClick={handleGoogleSignIn}>SignIn With Google</button>
       </form>
     </div>
   );
